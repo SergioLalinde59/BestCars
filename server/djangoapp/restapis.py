@@ -13,21 +13,66 @@ sentiment_analyzer_url = os.getenv(
 
 # def get_request(endpoint, **kwargs):
 def get_request(endpoint, **kwargs):
+   
     params = ""
     if(kwargs):
         for key,value in kwargs.items():
             params=params+key+"="+value+"&"
 
-    request_url = backend_url+endpoint+"?"+params
+    # Asegurémonos de que endpoint comienza con / y que no lo duplicamos
+    if not endpoint.startswith('/'):
+        endpoint = '/' + endpoint
+        
+    # Asegurémonos de que backend_url comienza con http://
+    url = backend_url
+    if not url.startswith('http://') and not url.startswith('https://'):
+        url = 'http://' + url
+    
+    request_url = url + endpoint
+    if params:
+        request_url += "?" + params
 
     print("GET from {} ".format(request_url))
+
+    # Resto del código...
     try:
         # Call get method of requests library with URL and parameters
         response = requests.get(request_url)
+        print(f"Response status: {response.status_code}")
+        print(f"Response content: {response.text[:200]}")  # Imprime los primeros 200 caracteres
         return response.json()
     except:
         # If any error occurs
-        print("Network exception occurred")# Add code for get requests to back end
+        print("Network exception occurred")
+        return []
+
+    if params:
+        request_url += "?" + params
+
+    print("backend_url: {}".format(backend_url))
+    print("GET from {} ".format(request_url))
+
+    try:
+        # Call get method of requests library with URL and parameters
+        response = requests.get(request_url)        
+        print(f"Response status: {response.status_code}")
+        print(f"Response content type: {response.headers.get('content-type')}")
+        print(f"Response content length: {len(response.text)}")
+        print(f"Response content sample: {response.text[:100]}")
+        
+        data = response.json()
+        print(f"Parsed data type: {type(data)}")
+        if isinstance(data, list):
+            print(f"List length: {len(data)}")
+            if len(data) > 0:
+                print(f"First item: {data[0]}")
+        
+        return data
+    except Exception as e:
+        # If any error occurs
+        print(f"Network exception occurred: {str(e)}")
+        return []
+
 
 # def analyze_review_sentiments(text):
 # request_url = sentiment_analyzer_url+"analyze/"+text

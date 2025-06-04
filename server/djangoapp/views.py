@@ -107,8 +107,21 @@ def get_dealerships(request, state="All"):
         endpoint = "/fetchDealers"
     else:
         endpoint = f"/fetchDealers/{state}"
+    
     dealerships = get_request(endpoint)
-    return JsonResponse({"status": 200, "dealers": dealerships})
+    
+    # Asegurar que dealerships es una lista (array)
+    if dealerships is None:
+        dealerships = []
+    
+    # Log para debug
+    print(f"Devolviendo {len(dealerships)} concesionarios")
+    
+    # Formato consistente para la respuesta
+    return JsonResponse({
+        "status": 200,
+        "dealers": dealerships
+    }, safe=False)
 
 # Get dealer details by ID
 def get_dealer_details(request, dealer_id):
@@ -145,3 +158,5 @@ def add_review(request):
             return JsonResponse({"status": 403, "message": "Unauthorized"})
     else:
         return JsonResponse({"status": 405, "message": "Method not allowed"})
+
+
