@@ -76,6 +76,8 @@ const PostReview = () => {
   }
 
   const get_cars = async ()=>{
+    console.log("Fetching car models...");
+    console.log(carmodels_url);
     const res = await fetch(carmodels_url, {
       method: "GET"
     });
@@ -85,9 +87,10 @@ const PostReview = () => {
     setCarmodels(carmodelsarr)
   }
   useEffect(() => {
+    console.log("PostReview Component Mounted");
     get_dealer();
     get_cars();
-  },[]);
+  },);
 
 
   return (

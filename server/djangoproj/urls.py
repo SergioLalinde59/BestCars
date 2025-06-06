@@ -22,7 +22,7 @@ from django.views.static import serve
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('djangoapp.urls')),  # Incluye todas las rutas de API
+    path('djangoapp/', include('djangoapp.urls')),  # Incluye todas las rutas de API
     path('', TemplateView.as_view(template_name="Home.html")),
     path('about/', TemplateView.as_view(template_name="About.html")),
     path('contact/', TemplateView.as_view(template_name="Contact.html")),
