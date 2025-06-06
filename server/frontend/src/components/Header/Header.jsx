@@ -3,6 +3,7 @@ import "../assets/style.css";
 import "../assets/bootstrap.min.css";
 
 const Header = () => {
+    console.log("Header component mounted");
     const logout = async (e) => {
     e.preventDefault();
     let logout_url = window.location.origin+"/djangoapp/logout";

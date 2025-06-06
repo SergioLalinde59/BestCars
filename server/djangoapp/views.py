@@ -21,6 +21,8 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 def get_cars(request):
+    print(f"get_cars request received at: {request.path}")
+    # Check if the database is empty, if so, initiate it
     count = CarMake.objects.filter().count()
     print(count)
     if(count == 0):
@@ -34,6 +36,7 @@ def get_cars(request):
 # Create a `login_request` view to handle sign in request
 @csrf_exempt
 def login_user(request):
+    print(f"Login request received at: {request.path}")
     # Solo procesar la autenticación para solicitudes POST
     if request.method == 'POST':
         try:
@@ -68,6 +71,7 @@ def logout_request(request):
 # Create a `registration` view to handle sign up request
 @csrf_exempt
 def registration(request):
+    print(f"Registration request received at: {request.path}")
     context = {}
 
     # Load JSON data from the request body
@@ -103,6 +107,7 @@ def registration(request):
 # # Update the `get_dealerships` view to render the index page with
 # a list of dealerships
 def get_dealerships(request, state="All"):
+    print(f"get_dealerships request received with state: {state}")
     if state == "All":
         endpoint = "/fetchDealers"
     else:
@@ -125,6 +130,7 @@ def get_dealerships(request, state="All"):
 
 # Get dealer details by ID
 def get_dealer_details(request, dealer_id):
+    print(f"get_dealer_details request received for dealer_id: {dealer_id}")
     if(dealer_id):
         endpoint = "/fetchDealer/"+str(dealer_id)
         dealership = get_request(endpoint)
@@ -134,11 +140,14 @@ def get_dealer_details(request, dealer_id):
 
 # Get dealer reviews and analyze sentiments
 def get_dealer_reviews(request, dealer_id):
+    print(f"views.py get_dealer_reviews dealer_id: {dealer_id}")
     if dealer_id:
         endpoint = f"/fetchReviews/dealer/{dealer_id}"
         reviews = get_request(endpoint)
+        print(f"views.py get_dealer_reviewsReviews fetched: {len(reviews)} for dealer_id: {dealer_id}")
         for review_detail in reviews:
             response = analyze_review_sentiments(review_detail['review'])
+            print(f"response: {response['sentiment']}")
             review_detail['sentiment'] = response['sentiment']
         return JsonResponse({"status": 200, "reviews": reviews})
     else:
@@ -146,6 +155,7 @@ def get_dealer_reviews(request, dealer_id):
 
 @csrf_exempt
 def add_review(request):
+    print(f"add_review request received at: {request.path}")
     if request.method == "POST":
         if request.user.is_anonymous == False:
             data = json.loads(request.body)
@@ -158,5 +168,3 @@ def add_review(request):
             return JsonResponse({"status": 403, "message": "Unauthorized"})
     else:
         return JsonResponse({"status": 405, "message": "Method not allowed"})
-
-

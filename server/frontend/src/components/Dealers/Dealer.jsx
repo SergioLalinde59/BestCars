@@ -9,7 +9,7 @@ import review_icon from "../assets/reviewbutton.png"
 import Header from '../Header/Header';
 
 const Dealer = () => {
-
+  console.log("Entering Dealer function");
 
   const [dealer, setDealer] = useState({});
   const [reviews, setReviews] = useState([]);
@@ -25,9 +25,11 @@ const Dealer = () => {
   let post_review = root_url+`postreview/${id}`;
   
   const get_dealer = async ()=>{
+    console.log("get_dealer - Fetching dealer details from: ", dealer_url);
     const res = await fetch(dealer_url, {
       method: "GET"
     });
+
     const retobj = await res.json();
     
     if(retobj.status === 200) {
@@ -37,6 +39,7 @@ const Dealer = () => {
   }
 
   const get_reviews = async ()=>{
+    console.log("get_reviews - Fetching reviews from: ", reviews_url);
     const res = await fetch(reviews_url, {
       method: "GET"
     });
@@ -52,21 +55,25 @@ const Dealer = () => {
   }
 
   const senti_icon = (sentiment)=>{
+    console.log("senti_icon - Getting icon for sentiment: ", sentiment);
     let icon = sentiment === "positive"?positive_icon:sentiment==="negative"?negative_icon:neutral_icon;
     return icon;
   }
 
   useEffect(() => {
+    console.log("useEffect called to fetch dealer and reviews");
     get_dealer();
     get_reviews();
     if(sessionStorage.getItem("username")) {
       setPostReview(<a href={post_review}><img src={review_icon} style={{width:'10%',marginLeft:'10px',marginTop:'10px'}} alt='Post Review'/></a>)
-
-      
     }
-  },[]);  
+  },[]);
 
 
+console.log("Dealer component mounted with dealer: ", dealer);
+console.log("Dealer component mounted with reviews: ", reviews);
+console.log("Dealer component mounted with unreviewed: ", unreviewed);
+  
 return(
   <div style={{margin:"20px"}}>
       <Header/>

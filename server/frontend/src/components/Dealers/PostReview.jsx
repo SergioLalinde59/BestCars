@@ -6,6 +6,7 @@ import Header from '../Header/Header';
 
 
 const PostReview = () => {
+  console.log("Entering PostReview function");
   const [dealer, setDealer] = useState({});
   const [review, setReview] = useState("");
   const [model, setModel] = useState();
@@ -22,6 +23,7 @@ const PostReview = () => {
   let carmodels_url = root_url+`/get_cars`;
 
   const postreview = async ()=>{
+    console.log("PostReview function called");
     let name = sessionStorage.getItem("firstname")+" "+sessionStorage.getItem("lastname");
     //If the first and second name are stores as null, use the username
     if(name.includes("null")) {
@@ -63,6 +65,7 @@ const PostReview = () => {
 
   }
   const get_dealer = async ()=>{
+    console.log("Fetching dealer details...");
     const res = await fetch(dealer_url, {
       method: "GET"
     });
@@ -87,7 +90,7 @@ const PostReview = () => {
     setCarmodels(carmodelsarr)
   }
   useEffect(() => {
-    console.log("PostReview Component Mounted");
+    console.log("useEffect called to fetch dealer and car models");
     get_dealer();
     get_cars();
   },);
