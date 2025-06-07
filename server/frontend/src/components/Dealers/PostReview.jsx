@@ -6,7 +6,6 @@ import Header from '../Header/Header';
 
 
 const PostReview = () => {
-  console.log("Entering PostReview function");
   const [dealer, setDealer] = useState({});
   const [review, setReview] = useState("");
   const [model, setModel] = useState();
@@ -18,13 +17,14 @@ const PostReview = () => {
   let root_url = curr_url.substring(0,curr_url.indexOf("postreview"));
   let params = useParams();
   let id =params.id;
-  let dealer_url = root_url+`/dealer/${id}`;
-  let review_url = root_url+`/add_review`;
-  let carmodels_url = root_url+`/get_cars`;
+  let dealer_url = root_url+`djangoapp/dealer/${id}`;
+  let review_url = root_url+`djangoapp/add_review`;
+  let carmodels_url = root_url+`djangoapp/get_cars`;
 
   const postreview = async ()=>{
-    console.log("PostReview function called");
+
     let name = sessionStorage.getItem("firstname")+" "+sessionStorage.getItem("lastname");
+    console.log("PostReview.jsx - name: "+ name);
     //If the first and second name are stores as null, use the username
     if(name.includes("null")) {
       name = sessionStorage.getItem("username");
@@ -65,7 +65,6 @@ const PostReview = () => {
 
   }
   const get_dealer = async ()=>{
-    console.log("Fetching dealer details...");
     const res = await fetch(dealer_url, {
       method: "GET"
     });
@@ -79,8 +78,6 @@ const PostReview = () => {
   }
 
   const get_cars = async ()=>{
-    console.log("Fetching car models...");
-    console.log(carmodels_url);
     const res = await fetch(carmodels_url, {
       method: "GET"
     });
@@ -90,10 +87,9 @@ const PostReview = () => {
     setCarmodels(carmodelsarr)
   }
   useEffect(() => {
-    console.log("useEffect called to fetch dealer and car models");
     get_dealer();
     get_cars();
-  },);
+  },[]);
 
 
   return (
