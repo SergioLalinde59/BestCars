@@ -5,7 +5,7 @@ import Header from '../Header/Header';
 import review_icon from "../assets/reviewicon.png"
 
 const Dealers = () => {
-  console.log("Entering Dealers function");
+  console.log("Dealers.jsx - Dealers");
   const [dealersList, setDealersList] = useState([]);
   // let [state, setState] = useState("")
   let [states, setStates] = useState([])
@@ -16,7 +16,7 @@ const Dealers = () => {
   let dealer_url_by_state = "/djangoapp/get_dealers/";
  
   const filterDealers = async (state) => {
-    console.log("filterDealers called with state: ", state);
+    console.log("Dealers.jsx - filterDealers - state: ", state);
     dealer_url_by_state = dealer_url_by_state+state;
     const res = await fetch(dealer_url_by_state, {
       method: "GET"
@@ -29,7 +29,7 @@ const Dealers = () => {
   }
 
   const get_dealers = async ()=>{
-    console.log("Fetching dealers from: ", dealer_url);
+    console.log("Dealears.jsx - get_dealers - url: ", dealer_url);
     const res = await fetch(dealer_url, {
       method: "GET"
     });
@@ -46,7 +46,7 @@ const Dealers = () => {
     }
   }
   useEffect(() => {
-    console.log("useEffect called to fetch dealers");
+    console.log("Dealers.jsx - useEffect");
     get_dealers();
   },[]);  
 
