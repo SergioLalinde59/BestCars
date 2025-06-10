@@ -2,34 +2,26 @@ import React from 'react';
 import "../assets/style.css";
 import "../assets/bootstrap.min.css";
 
-const Header = () => {    const logout = async (e) => {
+const Header = () => {
+    console.log("Header component mounted");
+    const logout = async (e) => {
     e.preventDefault();
-    let logout_url = window.location.origin+"/api/logout";
-    console.log("Logout URL:", logout_url);
-    try {
-      const res = await fetch(logout_url, {
-        method: "GET",
-        headers: {
-          'Accept': 'application/json',
-        },
-        credentials: 'same-origin'
-      });
-    
-      const json = await res.json();
-      console.log("Logout response:", json);
-      if (json) {
-        let username = sessionStorage.getItem('username');
-        sessionStorage.removeItem('username');
-        window.location.href = window.location.origin;
-        window.location.reload();
-        alert("Logging out "+username+"...")
-      }
-      else {
-        alert("The user could not be logged out.")
-      }
-    } catch (error) {
-      console.error("Error during logout:", error);
-      alert("Error during logout. Please try again.");
+    let logout_url = window.location.origin+"/djangoapp/logout";
+    const res = await fetch(logout_url, {
+      method: "GET",
+    });
+  
+    const json = await res.json();
+    if (json) {
+      console.log("Header rendering ", sessionStorage.getItem('username'));
+      let username = sessionStorage.getItem('username');
+      sessionStorage.removeItem('username');
+      window.location.href = window.location.origin;
+      window.location.reload();
+      alert("Logging out "+username+"...")
+    }
+    else {
+      alert("The user could not be logged out.")
     }
   };
     
@@ -40,9 +32,10 @@ let home_page_items =  <div></div>
 let curr_user = sessionStorage.getItem('username')
 
 //If the user is logged in, show the username and logout option on home page
-if ( curr_user !== null &&  curr_user !== "") {    home_page_items = <div className="input_panel">
+if ( curr_user !== null &&  curr_user !== "") {
+    home_page_items = <div className="input_panel">
       <text className='username'>{sessionStorage.getItem("username")}</text>
-    <button className="nav_item" style={{background: 'none', border: 'none', color: 'blue', textDecoration: 'underline', cursor: 'pointer', padding: '0', margin: '0 0 0 10px'}} onClick={logout}>Logout</button>
+    <a className="nav_item" href="/djangoapp/logout" onClick={logout}>Logout</a>
   </div>
 }
     return (

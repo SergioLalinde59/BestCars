@@ -19,39 +19,35 @@ def get_request(endpoint, **kwargs):
             params=params+key+"="+value+"&"
 
     request_url = backend_url+endpoint+"?"+params
-
-    print("GET from {} ".format(request_url))
+    print("restapis.py - get_request from {} ".format(request_url))
     try:
         # Call get method of requests library with URL and parameters
         response = requests.get(request_url)
         return response.json()
     except:
         # If any error occurs
-        print("Network exception occurred")# Add code for get requests to back end
+        print("restapis.py - get_request Network exception occurred")# Add code for get requests to back end
 
-# def analyze_review_sentiments(text):
-# request_url = sentiment_analyzer_url+"analyze/"+text
-# Add code for retrieving sentiments
 
-# def post_review(data_dict):
-# Add code for posting review
 def analyze_review_sentiments(text):
     request_url = sentiment_analyzer_url+"analyze/"+text
-    print("GET from {} ".format(request_url))
+    print("restapis.py - analyze_review_sentiments GET from {} ".format(request_url))
     try:
         # Call get method of requests library with URL and parameters
         response = requests.get(request_url)
+        print("restapis.py - analyze_review_sentiments response.json(): {}".format(response.json()))
+
         return response.json()
     except:
         # If any error occurs
-        print("Network exception occurred")
+        print("restapis.py - analyze_review_sentiments Network exception occurred")
         return {"sentiment": "neutral"}
 
 def post_review(data_dict):
     request_url = backend_url+"/insert_review"
     try:
         response = requests.post(request_url,json=data_dict)
-        print(response.json())
+        print("post_review response.json(): {}".format(response.json()))
         return response.json()
     except:
         print("Network exception occurred")
