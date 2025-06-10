@@ -22,7 +22,7 @@ from django.views.static import serve
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('djangoapp.urls')),  # Incluir las URLs de djangoapp
+    path('djangoapp/', include('djangoapp.urls')),  # Incluye todas las rutas de API
     path('', TemplateView.as_view(template_name="Home.html")),
     path('about/', TemplateView.as_view(template_name="About.html")),
     path('contact/', TemplateView.as_view(template_name="Contact.html")),
@@ -33,5 +33,6 @@ urlpatterns = [
     path('logo192.png', serve, {'document_root': settings.BASE_DIR / 'frontend/build', 'path': 'logo192.png'}),
     path('dealers/', TemplateView.as_view(template_name="index.html")),
     path('dealer/<int:dealer_id>', TemplateView.as_view(template_name="index.html")),
+    path('postreview/<int:dealer_id>',TemplateView.as_view(template_name="index.html")),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

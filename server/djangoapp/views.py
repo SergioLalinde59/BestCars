@@ -21,6 +21,8 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 def get_cars(request):
+    print(f"djangoapp/views.py - get_cars path: {request.path}")
+    # Check if the database is empty, if so, initiate it
     count = CarMake.objects.filter().count()
     print(count)
     if(count == 0):
@@ -34,6 +36,7 @@ def get_cars(request):
 # Create a `login_request` view to handle sign in request
 @csrf_exempt
 def login_user(request):
+    print(f"djangoapp/views.py - login_user path: {request.path}")
     # Solo procesar la autenticación para solicitudes POST
     if request.method == 'POST':
         try:
@@ -60,7 +63,7 @@ def login_user(request):
 # Create a `logout_request` view to handle sign out request
 @csrf_exempt
 def logout_request(request):
-    print(f"Logout request received at: {request.path}")
+    print(f"djangoapp/views.py - logout_request path: {request.path}")
     logout(request)  # Termina la sesión del usuario
     data = {"userName": "", "status": "Logged out"}  # Devuelve el username vacío y un status
     return JsonResponse(data)
@@ -68,6 +71,7 @@ def logout_request(request):
 # Create a `registration` view to handle sign up request
 @csrf_exempt
 def registration(request):
+    print(f"djangoapp/views.py - registration path: {request.path}")
     context = {}
 
     # Load JSON data from the request body
@@ -103,15 +107,30 @@ def registration(request):
 # # Update the `get_dealerships` view to render the index page with
 # a list of dealerships
 def get_dealerships(request, state="All"):
+    print(f"djangoapp/views.py - get_dealerships state: {state}")
     if state == "All":
         endpoint = "/fetchDealers"
     else:
         endpoint = f"/fetchDealers/{state}"
+    
     dealerships = get_request(endpoint)
-    return JsonResponse({"status": 200, "dealers": dealerships})
+    
+    # Asegurar que dealerships es una lista (array)
+    if dealerships is None:
+        dealerships = []
+    
+    # Log para debug
+    print(f"djangoapp/views.py - get_dealerships - No concesionarios = {len(dealerships)} ")
+    
+    # Formato consistente para la respuesta
+    return JsonResponse({
+        "status": 200,
+        "dealers": dealerships
+    }, safe=False)
 
 # Get dealer details by ID
 def get_dealer_details(request, dealer_id):
+    print(f"djangoapp/views.py - get_dealer_details dealer_id: {dealer_id}")
     if(dealer_id):
         endpoint = "/fetchDealer/"+str(dealer_id)
         dealership = get_request(endpoint)
@@ -121,9 +140,11 @@ def get_dealer_details(request, dealer_id):
 
 # Get dealer reviews and analyze sentiments
 def get_dealer_reviews(request, dealer_id):
+    print(f"djangoapp/views.py - get_dealer_reviews dealer_id: {dealer_id}")
     if dealer_id:
         endpoint = f"/fetchReviews/dealer/{dealer_id}"
         reviews = get_request(endpoint)
+        print(f"djangoapp/views.py - get_dealer_reviews - No Reviews {len(reviews)}")
         for review_detail in reviews:
             response = analyze_review_sentiments(review_detail['review'])
             review_detail['sentiment'] = response['sentiment']
@@ -133,6 +154,7 @@ def get_dealer_reviews(request, dealer_id):
 
 @csrf_exempt
 def add_review(request):
+    print(f"djangoapp/views.py - add_review path: {request.path}")
     if request.method == "POST":
         if request.user.is_anonymous == False:
             data = json.loads(request.body)
