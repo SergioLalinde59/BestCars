@@ -62,18 +62,20 @@ const PostReview = () => {
   if (json.status === 200) {
       window.location.href = window.location.origin+"/dealer/"+id;
   }
-
   }
+// ...existing code...
   const get_dealer = async ()=>{
     const res = await fetch(dealer_url, {
       method: "GET"
     });
     const retobj = await res.json();
     
-    if(retobj.status === 200) {
-      let dealerobjs = Array.from(retobj.dealer)
-      if(dealerobjs.length > 0)
-        setDealer(dealerobjs[0])
+    console.log("Datos recibidos del dealer:", retobj); // Nueva línea para depuración
+    if(retobj.status === 200 && retobj.dealer) {
+        console.log("Objeto dealer específico:", retobj.dealer); // Nueva línea para depuración
+        setDealer(retobj.dealer)
+    } else {
+        console.error("No se pudo obtener el dealer o el formato es incorrecto:", retobj); // Nueva línea para depuración
     }
   }
 
