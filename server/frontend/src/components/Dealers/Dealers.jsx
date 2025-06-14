@@ -53,14 +53,10 @@ const Dealers = () => {
 
 let isLoggedIn = sessionStorage.getItem("username") != null ? true : false;
 
-console.log("Dealers component mounted with dealersList: ", dealersList);
-console.log("Dealers component mounted with states: ", states);
-console.log("Dealers component mounted with isLoggedIn: ", isLoggedIn);
 
 return(
   <div>
       <Header/>
-
      <table className='table'>
       <tr>
       <th>ID</th>
